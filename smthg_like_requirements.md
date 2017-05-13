@@ -48,14 +48,16 @@ Qt Creator 4.1.0 based on QT 5.7.0 (C++) framework for developing in.
 
 
 Here is how the DB schema looks like.
-
+<pre>
 solutions      texts          tasks
----------      -----          -----
-id         --> id      <---   id        
+-----          -----          -----
+id         --> id   <------   id        
 key        |   encr_text  |   from_key
 confidence |   decr_text  |   to_key
-text_id  ---              --- text_id
+text_id ----              --- text_id
 result	                      processed
+
+</pre>
 
 This schema suggests the following workflow for the application:
 1. User enters a text to decrypt.
