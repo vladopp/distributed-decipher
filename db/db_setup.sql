@@ -89,7 +89,6 @@ CREATE TABLE tasks (
     from_key text NOT NULL,
     to_key text NOT NULL,
     text_id integer,
-    solution_id integer,
     processed boolean
 );
 
@@ -207,7 +206,7 @@ SELECT pg_catalog.setval('solutions_id_seq', 1, false);
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY tasks (id, from_key, to_key, text_id, solution_id, processed) FROM stdin;
+COPY tasks (id, from_key, to_key, text_id, processed) FROM stdin;
 \.
 
 
