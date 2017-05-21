@@ -10,10 +10,12 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    dbmanager.cpp
+    dbmanager.cpp \
+    confidenceevaluator.cpp
 
 INCLUDEPATH += "C:\Program Files\PostgreSQL\9.6\include"
 LIBS += "C:\Program Files\PostgreSQL\9.6\lib\libpq.lib"
 
 HEADERS += \
-    dbmanager.h
+    dbmanager.h \
+    confidenceevaluator.h
