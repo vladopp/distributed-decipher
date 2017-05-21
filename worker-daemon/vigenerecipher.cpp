@@ -8,7 +8,7 @@ std::string result=text;
     size_t idxKey=0U;
     for(;idxText<result.size(); idxText++)
     {
-        result[idxText] = result[idxText] + key[idxKey];
+        result[idxText] = std::tolower(result[idxText]) + key[idxKey];
 
         idxKey = (idxKey + 1) % key.size();
     }
