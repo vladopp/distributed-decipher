@@ -21,9 +21,16 @@ bool DBManager::initDbConnection()
 QSqlRecord DBManager::getFirstUnprocessedTask()
 {
     QSqlQuery query(db);
-    QString s = "SELECT public.tasks.'id',public.tasks.'from_key',public.tasks.'to_key',public.tasks.'text_id',"
-                               "relTblAl_3.encr_text,public.tasks.'processed' FROM public.tasks,public.texts relTblAl_3 "
-                               "WHERE (public.tasks.'text_id'=relTblAl_3.id) AND (processed = true) ORDER BY public.tasks.'from_key' ASC";
+    QString s = "SELECT public.tasks.'id',"
+                    "public.tasks.'from_key',"
+                    "public.tasks.'to_key',"
+                    "public.tasks.'text_id',"
+                    "relTblAl_3.encr_text,"
+                    "public.tasks.'processed' "
+                "FROM public.tasks, public.texts relTblAl_3 "
+                "WHERE (public.tasks.'text_id'=relTblAl_3.id) "
+                    "AND (processed = true)"
+                "ORDER BY public.tasks.'from_key' ASC";
     query.prepare(s);
     query.exec();
 

@@ -8,7 +8,6 @@ class KeyGenerator
 {
 public:
     static std::string nextPermutation(std::string currentPermutation);
-private:
     static std::string getLastPermutation(std::string currentPermutation);
 };
 

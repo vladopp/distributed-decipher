@@ -5,18 +5,10 @@
 #include <QVariant>
 #include <QThread>
 
-#include "keygenerator.h"
 #include <iostream>
 
 int main(int argc, char *argv[])
 {
-    for(std::string cur="aaa"; cur<="bbb"; cur=KeyGenerator::nextPermutation(cur))
-    {
-        std::cout << cur << std::endl;
-    }
-
-    std::cin.get();
-
     QCoreApplication a(argc, argv);
 
     DBManager *dbManager = new DBManager();
