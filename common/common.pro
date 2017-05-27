@@ -4,13 +4,21 @@
 #
 #-------------------------------------------------
 
-QT       -= core gui
+QT -= core gui
+QT += core sql
+
+CONFIG += c++11
 
 TARGET = common
 TEMPLATE = lib
 
-SOURCES += keygenerator.cpp \
+#INCLUDEPATH += "C:\Program Files\PostgreSQL\9.6\include"
+#LIBS += "C:\Program Files\PostgreSQL\9.6\lib\libpq.lib"
+
+SOURCES += dbmanager.cpp \
+    keygenerator.cpp \
     task.cpp
 
-HEADERS += keygenerator.h \
+HEADERS += dbmanager.h \
+    keygenerator.h \
     task.h
