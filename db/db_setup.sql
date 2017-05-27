@@ -7,7 +7,7 @@ Stores the ecrypted texts that should be processed
 -encrypted_text text the encrypted text entered from the user
 */
 CREATE TABLE texts (
-	id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     encrypted_text text NOT NULL
 );
 
@@ -23,11 +23,11 @@ Stores the decrypting tasks that should be done by the workers and their results
 -confidence numeric the confidence score stating the probabilty that the decrypted text is actually the original clear text
 */
 CREATE TABLE tasks (
-	id SERIAL PRIMARY KEY,
-	text_id integer REFERENCES texts,
+    id SERIAL PRIMARY KEY,
+    text_id integer REFERENCES texts,
     from_key text NOT NULL,
     to_key text NOT NULL,
     accepted_timestamp bigint,
-	best_key text,
+    best_key text,
     confidence numeric
 );

@@ -5,11 +5,18 @@
 
 // TODO should remove magic strings as column names
 
+/**
+ * @brief DBManager::DBManager ctor.
+ */
 DBManager::DBManager()
 {
 
 }
 
+/**
+ * @brief DBManager::initDbConnection Initialized the connection to the database.
+ * @return Returns true if the connection was successfull, false otherwise.
+ */
 bool DBManager::initDbConnection()
 {
     db = QSqlDatabase::addDatabase("QPSQL");
@@ -21,6 +28,10 @@ bool DBManager::initDbConnection()
     return db.open();
 }
 
+/**
+ * @brief DBManager::getUnprocessedTask Gets the next task to be processed.
+ * @return Returns Task object with information about the task, or NULL if there is no such task.
+ */
 Task DBManager::getUnprocessedTask()
 {
     QSqlTableModel model;
@@ -49,6 +60,11 @@ Task DBManager::getUnprocessedTask()
     return task;
 }
 
+/**
+ * @brief DBManager::getTextById Gets the encrypted text, referenced by the @id parameter, to be processed.
+ * @param id ID of a text.
+ * @return Returns a string with the encrypted text to be processed.
+ */
 std::string DBManager::getTextById(int id)
 {
     QSqlTableModel model;
@@ -61,7 +77,11 @@ std::string DBManager::getTextById(int id)
     return record.value("encrypted_text").toString().toStdString();
 }
 
-void DBManager::persistTaskResult(const Task& task)
+/**
+ * @brief DBManager::submitTaskResult Submits the result of the task.
+ * @param task Task object that contains the result to be submitted.
+ */
+void DBManager::submitTaskResult(const Task& task)
 {
     QSqlTableModel model;
     model.setTable("public.tasks");
@@ -81,7 +101,11 @@ void DBManager::persistTaskResult(const Task& task)
     //return model.insertRecord(-1, record);
 }
 
-    void DBManager::addNewTask(const Task& task)
+/**
+ * @brief DBManager::addNewTask Adds a new task to be processed.
+ * @param task The task to be added.
+ */
+void DBManager::addNewTask(const Task& task)
 {
     QSqlTableModel model;
     model.setTable("public.tasks");
@@ -89,6 +113,9 @@ void DBManager::persistTaskResult(const Task& task)
     QSqlRecord record = model.record();
 }
 
+/**
+ * @brief DBManager::closeDbConnection Closes the connection to the database.
+ */
 void DBManager::closeDbConnection()
 {
     db.close();

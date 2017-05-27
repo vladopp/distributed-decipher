@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
             }
             task.setBestKey(bestKey);
             task.setConfidence(maxConfidence);
-            dbManager->persistTaskResult(task);
+            dbManager->submitTaskResult(task);
             printf("Processed task with id %d. Got score %f with key %s\n", task.getId(), task.getConfidence(), task.getBestKey().c_str());
         }
     }

@@ -4,6 +4,11 @@
 #include <vector>
 #include <string>
 
+/**
+ * @brief The KeyGenerator class This class is responsible for creating alphabetical permutations
+ * of strings in order to ease the process of creating keys.
+ *
+ */
 class KeyGenerator
 {
 public:

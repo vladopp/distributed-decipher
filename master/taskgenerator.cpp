@@ -10,12 +10,12 @@ std::vector< std::pair<std::string, std::string> > TaskGenerator::getTasks( size
 {
     std::vector< std::pair<std::string, std::string> > result;
 
-    std::string lowerBound( keyLength, 'a' );
-    std::string upperBound = getUpperBound( lowerBound );
-    std::string end( 'z', keyLength );
+    std::string lowerBound(keyLength, 'a');
+    std::string upperBound = getUpperBound(lowerBound);
+    std::string end(keyLength, 'z');
     while( lowerBound != upperBound )
     {
-        result.push_back( std::make_pair( lowerBound, upperBound ) );
+        result.push_back(std::make_pair(lowerBound, upperBound));
 
         lowerBound = KeyGenerator::nextPermutation(upperBound);
         upperBound = getUpperBound(lowerBound);
@@ -29,7 +29,7 @@ std::vector< std::pair<std::string, std::string> > TaskGenerator::getTasks( size
  * @param lowerBound
  * @return
  */
-std::string TaskGenerator::getUpperBound( std::string lowerBound )
+std::string TaskGenerator::getUpperBound(std::string lowerBound)
 {
     static const int TASK_SIZE = 3;
     if(lowerBound.size() <= TASK_SIZE )

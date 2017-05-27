@@ -1,5 +1,11 @@
 #include "vigenerecipher.h"
 
+/**
+ * @brief VigenereCipher::encrypt Encrypts the text with the key, using Vigenere cipher.
+ * @param text Text to be encrypted.
+ * @param key Key to be used for encryption.
+ * @return Returns the encrypted text.
+ */
 std::string VigenereCipher::encrypt(const std::string& text, const std::string& key)
 {
 std::string result=text;
@@ -16,6 +22,12 @@ std::string result=text;
     return result;
 }
 
+/**
+ * @brief VigenereCipher::decrypt Decrypts the text with the key, using Vigenere cipher.
+ * @param text Text to be decrypted.
+ * @param key Key to be used for decryption.
+ * @return Returns the decrypted text.
+ */
 std::string VigenereCipher::decrypt(const std::string& text, const std::string& key)
 {
 std::string result=text;

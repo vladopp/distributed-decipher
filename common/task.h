@@ -3,6 +3,10 @@
 
 #include <string>
 
+/**
+ * @brief The Task class
+ * TODO: Add description.
+ */
 class Task
 {
 public:
@@ -14,13 +18,10 @@ public:
     int getId() const;
 
     int getTextId() const;
-    void setTextId(int value);
 
     std::string getFromKey() const;
-    void setFromKey(const std::string& value);
 
     std::string getToKey() const;
-    void setToKey(const std::string& value);
 
     unsigned long long getAcceptedTimestamp() const;
     void setAcceptedTimestamp(unsigned long long value);
