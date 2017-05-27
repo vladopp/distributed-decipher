@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     dbmanager.cpp \
     confidenceevaluator.cpp \
     vigenerecipher.cpp \
-    ..\common\keygenerator.cpp
+    ..\common\keygenerator.cpp \
+    ..\common\task.cpp
 
 INCLUDEPATH += "C:\Program Files\PostgreSQL\9.6\include" \
                "..\common"
@@ -24,4 +25,5 @@ HEADERS += \
     dbmanager.h \
     confidenceevaluator.h \
     vigenerecipher.h \
-    ..\common\keygenerator.h
+    ..\common\keygenerator.h \
+    ..\common\task.h

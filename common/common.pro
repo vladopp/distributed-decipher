@@ -9,6 +9,8 @@ QT       -= core gui
 TARGET = common
 TEMPLATE = lib
 
-SOURCES += keygenerator.cpp
+SOURCES += keygenerator.cpp \
+    task.cpp
 
-HEADERS += keygenerator.h
+HEADERS += keygenerator.h \
+    task.h
