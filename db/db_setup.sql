@@ -8,7 +8,7 @@ Stores the ecrypted texts that should be processed
 */
 CREATE TABLE texts (
     id SERIAL PRIMARY KEY,
-    encrypted_text text NOT NULL
+    encrypted_text text UNIQUE NOT NULL
 );
 
 /*
