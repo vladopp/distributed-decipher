@@ -10,6 +10,20 @@ Task::Task(int id) : id(id)
 
 /**
  * @brief Task::Task ctor.
+ * @param textId ID of the text to be processed.
+ * @param fromKey Starting key from which to start the processing.
+ * @param toKey Ending key to which to end the processing.
+ */
+Task::Task(int textId, std::string fromKey, std::string toKey) :
+    id(-1),
+    textId(textId),
+    fromKey(fromKey),
+    toKey(toKey)
+{
+}
+
+/**
+ * @brief Task::Task ctor.
  * @param id ID of the task
  * @param textId ID of the text to be processed.
  * @param fromKey Starting key from which to start the processing.

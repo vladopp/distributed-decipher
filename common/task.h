@@ -11,6 +11,7 @@ class Task
 {
 public:
     Task(int id);
+    Task(int textId, std::string fromKey, std::string toKey);
     Task(int id, int textId, std::string fromKey, std::string toKey);
     Task(int id, int textId, std::string fromKey, std::string toKey, unsigned long long acceptedTimestamp);
     Task(int id, int textId, std::string fromKey, std::string toKey, unsigned long long acceptedTimestamp, std::string bestKey, double confidence);
