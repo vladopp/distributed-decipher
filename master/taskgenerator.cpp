@@ -4,7 +4,7 @@
 /**
  * @brief TaskGenerator::getTasks
  * @param keyLength
- * @return
+ * @return Returns a vector with all tasks for the provided @keyLength.
  */
 std::vector< std::pair<std::string, std::string> > TaskGenerator::getTasks( size_t keyLength )
 {

@@ -7,17 +7,30 @@
 
 #include <iostream>
 
-#include <keygenerator.h>
-#include <vigenerecipher.h>
-#include <confidenceevaluator.h>
+#include "keygenerator.h"
+#include "vigenerecipher.h"
+#include "confidenceevaluator.h"
+#include "configmanager.h"
+#include <string>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+    ConfigManager configuration;
+    if(configuration.loadFromFile("config.ini") == false)
+    {
+        fprintf(stderr, "Error reading configuration file.");
+    }
+
     DBManager *dbManager = new DBManager();
     printf("Connecting to database...\n");
-    bool ok = dbManager->initDbConnection();
+    bool ok = dbManager->initDbConnection(
+                configuration.getDriver(),
+                configuration.getHostName(),
+                configuration.getDatabaseName(),
+                configuration.getUsername(),
+                configuration.getPassword());
 
     if (!ok)
     {
