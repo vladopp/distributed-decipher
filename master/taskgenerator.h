@@ -7,7 +7,7 @@
 class TaskGenerator
 {
 public:
-    static std::vector< std::pair<QString, QString> > getTasks( size_t keyLength );
+    static std::vector< std::pair<QString, QString> > getTasks(int keyLength);
 private:
     static QString getUpperBound(QString lowerBound);
 };

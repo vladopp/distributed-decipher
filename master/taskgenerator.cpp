@@ -6,7 +6,7 @@
  * @param keyLength
  * @return Returns a vector with all tasks for the provided @keyLength.
  */
-std::vector< std::pair<QString, QString> > TaskGenerator::getTasks( size_t keyLength )
+std::vector< std::pair<QString, QString> > TaskGenerator::getTasks(int keyLength)
 {
     std::vector< std::pair<QString, QString> > result;
 
@@ -40,7 +40,7 @@ QString TaskGenerator::getUpperBound(QString lowerBound)
 
     QString upperBound = lowerBound;
     // set TASK_SIZE 'z' at the end
-    for(size_t i=upperBound.size() - TASK_SIZE; i < upperBound.size(); i++)
+    for(int i=upperBound.size() - TASK_SIZE; i < upperBound.size(); i++)
     {
         upperBound.replace(i, 1, 'z');
     }

@@ -28,3 +28,6 @@ HEADERS += confidenceevaluator.h \
     ..\common\task.h \
     ..\common\dbmanager.h \
     ..\common\configmanager.h
+
+RESOURCES += \
+    resources.qrc

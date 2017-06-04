@@ -1,69 +1,38 @@
 #include "configmanager.h"
+#include <QSettings>
 
 ConfigManager::ConfigManager()
 {
 }
 
-bool ConfigManager::loadFromFile(std::string filename)
+bool ConfigManager::loadFromFile(QString filename)
 {
-    std::ifstream configurationFile(filename);
-    if(configurationFile.bad())
-    {
-        return false;
-    }
+    QSettings configurationFile(filename, QSettings::IniFormat);
 
-    std::map<std::string,std::string> paramToValue;
-
-    loadIntoMap(configurationFile, paramToValue);
-
-    driver = paramToValue["driver"];
-    hostName = paramToValue["hostName"];
-    databaseName = paramToValue["databaseName"];
-    username = paramToValue["username"];
-    password = paramToValue["password"];
-
-    configurationFile.close();
+    hostName = configurationFile.value("hostName").toString();
+    databaseName = configurationFile.value("databaseName").toString();
+    username = configurationFile.value("username").toString();
+    password = configurationFile.value("password").toString();
 
     return true;
 }
 
-void ConfigManager::loadIntoMap(std::ifstream &input, std::map<std::string,std::string> &paramToValue)
-{
-    // Expected file format:
-    // param1=value1
-    // param2=value2
-    // ....
-    std::string line;
-    while(input >> line)
-    {
-        size_t equalityPos = line.find('=');
-        std::string param = line.substr(0, equalityPos);
-        std::string value = line.substr(equalityPos + 1, line.size());
-
-        paramToValue[param] = value;
-    }
-}
-
-std::string ConfigManager::getDriver() const
-{
-    return driver;
-}
-std::string ConfigManager::getHostName() const
+QString ConfigManager::getHostName() const
 {
     return hostName;
 
 }
-std::string ConfigManager::getDatabaseName() const
+QString ConfigManager::getDatabaseName() const
 {
     return databaseName;
 
 }
-std::string ConfigManager::getUsername() const
+QString ConfigManager::getUsername() const
 {
     return username;
 
 }
-std::string ConfigManager::getPassword() const
+QString ConfigManager::getPassword() const
 {
     return password;
 }

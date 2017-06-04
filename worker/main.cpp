@@ -15,12 +15,11 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     ConfigManager configuration;
-    if(configuration.loadFromFile("config.ini") == false)
+    if(!configuration.loadFromFile(":/config.ini"))
     {
         fprintf(stderr, "Error reading configuration file.");
     }
 
-    printf("Connecting to database...\n");
     DBManager* dbManager = new DBManager(configuration.getHostName(),
                                          configuration.getDatabaseName(),
                                          configuration.getUsername(),
@@ -64,7 +63,7 @@ int main(int argc, char *argv[])
             QString text = dbManager->getTextById(textId);
             double maxConfidence = 0.0;
 
-            ConfidenceEvaluator evaluator("D:\\Education\\NBU\\Semester 6\\NETB380 (Programming Practice)\\distributed-decipher\\worker\\resources\\english-words.txt");
+            ConfidenceEvaluator evaluator(":/resources/english-words.txt");
             for (QString key = fromKey; key != KeyGenerator::nextPermutation(toKey); key=KeyGenerator::nextPermutation(key))
             {
                 QString decipheredText = VigenereCipher::decrypt(text, key);
@@ -78,11 +77,12 @@ int main(int argc, char *argv[])
             task.setBestKey(bestKey);
             task.setConfidence(maxConfidence);
             dbManager->addTaskResult(task);
-            printf("Processed task with id %d. Got score %f with key %s\n", task.getId(), task.getConfidence(), task.getBestKey());
+            printf("Processed task with id %d. Got score %f with key %s\n",
+                   task.getId(), task.getConfidence(), qPrintable(task.getBestKey()));
         }
         //break;
     }
-    printf("%s", VigenereCipher::decrypt(dbManager->getTextById(id), bestKey));
+    printf("%s", qPrintable(VigenereCipher::decrypt(dbManager->getTextById(id), bestKey)));
 
     dbManager->closeConnection();
     return a.exec();

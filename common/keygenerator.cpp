@@ -8,7 +8,7 @@
 QString KeyGenerator::nextPermutation(QString currentPermutation)
 {
     // check if input is valid
-    for(size_t i=0; i < currentPermutation.size(); i++)
+    for(int i=0; i < currentPermutation.size(); i++)
     {
         if(currentPermutation.at(i) < 'a' || currentPermutation.at(i) > 'z')
         {
@@ -20,7 +20,7 @@ QString KeyGenerator::nextPermutation(QString currentPermutation)
     QString newPermutation = currentPermutation;
     bool incremented = false;
     // signed counter, to get negative when we iterated whole string
-    for(size_t i = newPermutation.size() - 1; i >= 0 ; i--)
+    for(int i = newPermutation.size() - 1; i >= 0 ; i--)
     {
         if(newPermutation.at(i) < 'z')
         {

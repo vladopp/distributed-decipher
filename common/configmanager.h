@@ -1,30 +1,24 @@
 #ifndef CONFIGMANAGER_H
 #define CONFIGMANAGER_H
 
-#include <map>
-#include <fstream>
-#include <string>
+#include <QString>
 
 class ConfigManager
 {
 public:
     ConfigManager();
 
-    bool loadFromFile(std::string filename);
-    std::string getDriver() const;
-    std::string getHostName() const;
-    std::string getDatabaseName() const;
-    std::string getUsername() const;
-    std::string getPassword() const;
+    bool loadFromFile(QString filename);
+    QString getHostName() const;
+    QString getDatabaseName() const;
+    QString getUsername() const;
+    QString getPassword() const;
 
 private:
-    std::string driver;
-    std::string hostName;
-    std::string databaseName;
-    std::string username;
-    std::string password;
-
-    void loadIntoMap(std::ifstream &input, std::map<std::string,std::string> &paramToValue);
+    QString hostName;
+    QString databaseName;
+    QString username;
+    QString password;
 };
 
 #endif // CONFIGMANAGER_H
