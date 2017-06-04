@@ -8,21 +8,21 @@
 class DBManager
 {
 public:
-    DBManager(std::string host, std::string database, std::string username, std::string password);
+    DBManager(QString host, QString database, QString username, QString password);
     bool connect();
     Task getUnprocessedTask();
-    std::string getTextById(int id);
-    int getTextId(const std::string& text);
+    QString getTextById(int id);
+    int getTextId(const QString& text);
     void addTaskResult(const Task& task);
     void addNewTask(const Task& task);
-    void addNewText(const std::string& text);
+    void addNewText(const QString& text);
     void closeConnection();
 private:
     QSqlDatabase db;
-    const std::string host;
-    const std::string database;
-    const std::string username;
-    const std::string password;
+    const QString host;
+    const QString database;
+    const QString username;
+    const QString password;
 };
 
 

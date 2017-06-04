@@ -1,16 +1,16 @@
 #ifndef VIGENERECIPHER_H
 #define VIGENERECIPHER_H
 
-#include <string>
+#include <QString>
 
 class VigenereCipher
 {
 public:
-    static std::string encrypt(const std::string& text, const std::string& key);
-    static std::string decrypt(const std::string& text, const std::string& key);
-    static int findProbableKeyLength(const std::string& text);
+    static QString encrypt(const QString& text, const QString& key);
+    static QString decrypt(const QString& text, const QString& key);
+    static int findProbableKeyLength(const QString& text);
 private:
-    static double calculateIndexOfCoincidence(const std::string& text, int step);
+    static double calculateIndexOfCoincidence(const QString& text, int step);
 };
 
 #endif // VIGENERECIPHER_H

@@ -5,32 +5,32 @@
  * @param currentPermutation Starting permutation of letters in range ['a':'z'].
  * @return Returns the next permutation of characters or if such doesn't exist it returns the @lastPermutation of the @currentPermutation.
  */
-std::string KeyGenerator::nextPermutation(std::string currentPermutation)
+QString KeyGenerator::nextPermutation(QString currentPermutation)
 {
     // check if input is valid
     for(size_t i=0; i < currentPermutation.size(); i++)
     {
-        if(currentPermutation[i] < 'a' || currentPermutation[i] > 'z')
+        if(currentPermutation.at(i) < 'a' || currentPermutation.at(i) > 'z')
         {
             return getLastPermutation(currentPermutation);
         }
     }
 
     // generate new permutation
-    std::string newPermutation = currentPermutation;
+    QString newPermutation = currentPermutation;
     bool incremented = false;
     // signed counter, to get negative when we iterated whole string
     for(size_t i = newPermutation.size() - 1; i >= 0 ; i--)
     {
-        if(newPermutation[i] < 'z')
+        if(newPermutation.at(i) < 'z')
         {
             incremented = true;
-            newPermutation[i]++;
+            newPermutation.replace(i, 1, newPermutation.at(i).unicode()+1);
             break;
         }
         else
         {
-            newPermutation[i] = 'a';
+            newPermutation.replace(i, 1, 'a');
         }
     }
 
@@ -49,7 +49,7 @@ std::string KeyGenerator::nextPermutation(std::string currentPermutation)
  * @param currentPermutation The string from which to get the length of the returning string.
  * @return Returns a string with same length as currentPermutation's length, filled with 'z' character.
  */
-std::string KeyGenerator::getLastPermutation(std::string currentPermutation)
+QString KeyGenerator::getLastPermutation(QString currentPermutation)
 {
-    return std::string(currentPermutation.size(), 'z');
+    return QString(currentPermutation.size(), 'z');
 }

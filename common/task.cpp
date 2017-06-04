@@ -14,7 +14,7 @@ Task::Task(int id) : id(id)
  * @param fromKey Starting key from which to start the processing.
  * @param toKey Ending key to which to end the processing.
  */
-Task::Task(int textId, std::string fromKey, std::string toKey) :
+Task::Task(int textId, QString fromKey, QString toKey) :
     id(-1),
     textId(textId),
     fromKey(fromKey),
@@ -29,7 +29,7 @@ Task::Task(int textId, std::string fromKey, std::string toKey) :
  * @param fromKey Starting key from which to start the processing.
  * @param toKey Ending key to which to end the processing.
  */
-Task::Task(int id, int textId, std::string fromKey, std::string toKey) :
+Task::Task(int id, int textId, QString fromKey, QString toKey) :
     id(id),
     textId(textId),
     fromKey(fromKey),
@@ -45,7 +45,7 @@ Task::Task(int id, int textId, std::string fromKey, std::string toKey) :
  * @param toKey Ending key to which to end the processing.
  * @param acceptedTimestamp TODO: add description.
  */
-Task::Task(int id, int textId, std::string fromKey, std::string toKey, unsigned long long acceptedTimestamp) :
+Task::Task(int id, int textId, QString fromKey, QString toKey, unsigned long long acceptedTimestamp) :
     Task(id, textId, fromKey, toKey)
 {
     setAcceptedTimestamp(acceptedTimestamp);
@@ -61,7 +61,7 @@ Task::Task(int id, int textId, std::string fromKey, std::string toKey, unsigned 
  * @param bestKey
  * @param confidence
  */
-Task::Task(int id, int textId, std::string fromKey, std::string toKey, unsigned long long acceptedTimestamp, std::string bestKey, double confidence) :
+Task::Task(int id, int textId, QString fromKey, QString toKey, unsigned long long acceptedTimestamp, QString bestKey, double confidence) :
     Task(id, textId, fromKey, toKey, acceptedTimestamp)
 {
     setBestKey(bestKey);
@@ -90,7 +90,7 @@ int Task::getTextId() const
  * @brief Task::getFromKey
  * @return Returns the starting key of the task.
  */
-std::string Task::getFromKey() const
+QString Task::getFromKey() const
 {
     return fromKey;
 }
@@ -99,7 +99,7 @@ std::string Task::getFromKey() const
  * @brief Task::getToKey
  * @return Returns the last key of the task.
  */
-std::string Task::getToKey() const
+QString Task::getToKey() const
 {
     return toKey;
 }
@@ -126,7 +126,7 @@ void Task::setAcceptedTimestamp(unsigned long long value)
  * @brief Task::getBestKey
  * @return
  */
-std::string Task::getBestKey() const
+QString Task::getBestKey() const
 {
     return bestKey;
 }
@@ -135,7 +135,7 @@ std::string Task::getBestKey() const
  * @brief Task::setBestKey
  * @param value
  */
-void Task::setBestKey(const std::string &value)
+void Task::setBestKey(const QString &value)
 {
     bestKey = value;
 }

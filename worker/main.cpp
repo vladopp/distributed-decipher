@@ -1,8 +1,5 @@
 #include <dbmanager.h>
 #include <QCoreApplication>
-#include <QSqlDatabase>
-#include <QSqlRecord>
-#include <QVariant>
 #include <QThread>
 
 #include <iostream>
@@ -23,14 +20,13 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error reading configuration file.");
     }
 
-    DBManager *dbManager = new DBManager();
     printf("Connecting to database...\n");
-    bool ok = dbManager->initDbConnection(
-                configuration.getDriver(),
-                configuration.getHostName(),
-                configuration.getDatabaseName(),
-                configuration.getUsername(),
-                configuration.getPassword());
+    DBManager* dbManager = new DBManager(configuration.getHostName(),
+                                         configuration.getDatabaseName(),
+                                         configuration.getUsername(),
+                                         configuration.getPassword());
+    printf("Connecting to database...\n");
+    bool ok = dbManager->connect();
 
     if (!ok)
     {
@@ -39,8 +35,19 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    QString encr =  VigenereCipher::encrypt("Ferrari N.V. (pronounced [ferˈrari]) is an Italian sports car manufacturer based in Maranello. Founded by Enzo Ferrari in 1939 as Auto Avio Costruzioni, the company built its first car in 1940. However the company's inception as an auto manufacturer is usually recognized in 1947, when the first Ferrari-badged car was completed.", "ab");
+    //std::cout << VigenereCipher::decrypt(encr, "ab") << std::endl;
+    dbManager->addNewText(encr);
+    int id = dbManager->getTextId(encr);
+    Task taskk(id, "ab", "ab");
+    //Task taskz(id, "bb", "zz");
+    dbManager->addNewTask(taskk);
+    //dbManager->addNewTask(taskz);
+
     printf("Connected to database.\n");
-    while (true)
+    QString bestKey = "";
+    int rounds = 2;
+    while (rounds--)
     {
         Task task = dbManager->getUnprocessedTask();
         if (task.getId() == 0)
@@ -51,18 +58,18 @@ int main(int argc, char *argv[])
         } else
         {
             printf("Got task with id %d. Working on it...\n", task.getId());
-            std::string fromKey = task.getFromKey();
-            std::string toKey = task.getToKey();
+            QString fromKey = task.getFromKey();
+            QString toKey = task.getToKey();
             int textId = task.getTextId();
-            std::string text = dbManager->getTextById(textId);
+            QString text = dbManager->getTextById(textId);
             double maxConfidence = 0.0;
-            std::string bestKey = "";
+
             ConfidenceEvaluator evaluator("D:\\Education\\NBU\\Semester 6\\NETB380 (Programming Practice)\\distributed-decipher\\worker\\resources\\english-words.txt");
-            for (std::string key = fromKey; key != KeyGenerator::nextPermutation(toKey); key=KeyGenerator::nextPermutation(key))
+            for (QString key = fromKey; key != KeyGenerator::nextPermutation(toKey); key=KeyGenerator::nextPermutation(key))
             {
-                std::string decipheredText = VigenereCipher::decrypt(text, key);
+                QString decipheredText = VigenereCipher::decrypt(text, key);
                 double confidence = evaluator.calculateConfidence(decipheredText);
-                if (confidence > maxConfidence)
+                if (confidence >= maxConfidence)
                 {
                     maxConfidence = confidence;
                     bestKey = key;
@@ -70,11 +77,13 @@ int main(int argc, char *argv[])
             }
             task.setBestKey(bestKey);
             task.setConfidence(maxConfidence);
-            dbManager->submitTaskResult(task);
-            printf("Processed task with id %d. Got score %f with key %s\n", task.getId(), task.getConfidence(), task.getBestKey().c_str());
+            dbManager->addTaskResult(task);
+            printf("Processed task with id %d. Got score %f with key %s\n", task.getId(), task.getConfidence(), task.getBestKey());
         }
+        //break;
     }
+    printf("%s", VigenereCipher::decrypt(dbManager->getTextById(id), bestKey));
 
-    dbManager->closeDbConnection();
+    dbManager->closeConnection();
     return a.exec();
 }

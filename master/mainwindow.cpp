@@ -51,9 +51,8 @@ void mainwindow::on_buttonDecrypt_clicked()
         msgBox.exec();
         return;
     }
-    std::string encryptedText = ui->editEncryptedText->toPlainText()
-            .trimmed()
-            .toStdString();
+    QString encryptedText = ui->editEncryptedText->toPlainText()
+            .trimmed();
 
     // TODO: This method should be called in seperate thread.
     // Reason: We must update the status of the decrypted text dynamically.
@@ -71,7 +70,7 @@ void mainwindow::on_buttonDecrypt_clicked()
     msgBox.exec();
 }
 
-void mainwindow::generateTasks(std::string encryptedText)
+void mainwindow::generateTasks(QString encryptedText)
 {
     int mostProbableKeyLength = getMostProbableKeyLength(encryptedText);
     int startTaskID = 0;
@@ -92,7 +91,7 @@ void mainwindow::generateTasks(std::string encryptedText)
     }
 }
 
-int mainwindow::getMostProbableKeyLength(std::string encryptedText)
+int mainwindow::getMostProbableKeyLength(QString encryptedText)
 {
     // TODO: Method should be implemented after a meeting with Landjev. Haha...
     return -1;
@@ -113,10 +112,10 @@ void mainwindow::watchDecryptedTextStatus()
 int mainwindow::submitAllKeysWithLength(int keyLength, int startTaskID, int textID)
 {
     // TODO: Perhaps do a producer-consumer pattern instead of returning the whole vector?
-    std::vector< std::pair<std::string, std::string> > tasks = TaskGenerator::getTasks(keyLength);
+    std::vector< std::pair<QString, QString> > tasks = TaskGenerator::getTasks(keyLength);
 
     int nextTaskID = startTaskID;
-    for(std::pair<std::string, std::string > taskBounds : tasks)
+    for(std::pair<QString, QString > taskBounds : tasks)
     {
         Task currentTask(nextTaskID, textID, taskBounds.first, taskBounds.second);
 

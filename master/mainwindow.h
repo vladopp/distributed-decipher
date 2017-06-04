@@ -23,8 +23,8 @@ private:
     Ui::mainwindow *ui;
     DBManager *db;
 
-    void generateTasks(std::string encryptedText);
-    int getMostProbableKeyLength(std::string encryptedText);
+    void generateTasks(QString encryptedText);
+    int getMostProbableKeyLength(QString encryptedText);
     void watchDecryptedTextStatus();
     int submitAllKeysWithLength(int keyLength, int startTaskID, int textID);
 };

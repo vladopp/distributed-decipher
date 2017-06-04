@@ -20,7 +20,7 @@ const static QString COLUMN_ENCRYPTED_TEXT = "encrypted_text";
 /**
  * @brief DBManager::DBManager ctor.
  */
-DBManager::DBManager(std::string host, std::string database, std::string username, std::string password) :
+DBManager::DBManager(QString host, QString database, QString username, QString password) :
     host(host), database(database), username(username), password(password)
 {
 }
@@ -32,10 +32,10 @@ DBManager::DBManager(std::string host, std::string database, std::string usernam
 bool DBManager::connect()
 {
     db = QSqlDatabase::addDatabase(DB_TYPE);
-    db.setHostName(QString::fromStdString(host));
-    db.setDatabaseName(QString::fromStdString(database));
-    db.setUserName(QString::fromStdString(username));
-    db.setPassword(QString::fromStdString(password));
+    db.setHostName(host);
+    db.setDatabaseName(database);
+    db.setUserName(username);
+    db.setPassword(password);
 
     return db.open();
 }
@@ -65,8 +65,8 @@ Task DBManager::getUnprocessedTask()
 
     Task task(record.value(COLUMN_ID).toInt(),
               record.value(COLUMN_TEXT_ID).toInt(),
-              record.value(COLUMN_FROM_KEY).toString().toStdString(),
-              record.value(COLUMN_TO_KEY).toString().toStdString());
+              record.value(COLUMN_FROM_KEY).toString(),
+              record.value(COLUMN_TO_KEY).toString());
     return task;
 }
 
@@ -75,7 +75,7 @@ Task DBManager::getUnprocessedTask()
  * @param id ID of a text.
  * @return Returns a string with the encrypted text to be processed.
  */
-std::string DBManager::getTextById(int id)
+QString DBManager::getTextById(int id)
 {
     QSqlTableModel model;
     model.setTable(TABLE_TEXTS);
@@ -84,7 +84,7 @@ std::string DBManager::getTextById(int id)
     model.select();
     QSqlRecord record = model.record(0);
 
-    return record.value(COLUMN_ENCRYPTED_TEXT).toString().toStdString();
+    return record.value(COLUMN_ENCRYPTED_TEXT).toString();
 }
 
 /**
@@ -92,11 +92,11 @@ std::string DBManager::getTextById(int id)
  * @param text The text which id should be found.
  * @return The id of the text
  */
-int DBManager::getTextId(const std::string& text)
+int DBManager::getTextId(const QString& text)
 {
     QSqlTableModel model;
     model.setTable(TABLE_TEXTS);
-    model.setFilter(QString::fromStdString(COLUMN_ENCRYPTED_TEXT.toStdString() + " = '" + text + "'"));
+    model.setFilter(COLUMN_ENCRYPTED_TEXT + " = '" + text + "'");
 
     model.select();
     QSqlRecord record = model.record(0);
@@ -120,7 +120,7 @@ void DBManager::addTaskResult(const Task& task)
     model.setEditStrategy(QSqlTableModel::OnManualSubmit);
 
     QSqlRecord record = model.record(0);
-    record.setValue(COLUMN_BEST_KEY, QString::fromStdString(task.getBestKey()));
+    record.setValue(COLUMN_BEST_KEY, task.getBestKey());
     record.setValue(COLUMN_CONFIDENCE, task.getConfidence());
     model.setRecord(0, record);
     model.submitAll();
@@ -144,8 +144,8 @@ void DBManager::addNewTask(const Task& task)
 
     QSqlRecord record = model.record();
     record.setValue(COLUMN_TEXT_ID, task.getTextId());
-    record.setValue(COLUMN_FROM_KEY, QString::fromStdString(task.getFromKey()));
-    record.setValue(COLUMN_TO_KEY, QString::fromStdString(task.getToKey()));
+    record.setValue(COLUMN_FROM_KEY, task.getFromKey());
+    record.setValue(COLUMN_TO_KEY, task.getToKey());
     model.insertRecord(-1, record);
     model.submitAll();
     db.commit();
@@ -155,7 +155,7 @@ void DBManager::addNewTask(const Task& task)
  * @brief DBManager::addNewText adds a new text that should be dedciphered
  * @param text The text that should be added
  */
-void DBManager::addNewText(const std::string& text)
+void DBManager::addNewText(const QString& text)
 {
     QSqlTableModel model;
     model.setTable(TABLE_TEXTS);
@@ -167,7 +167,7 @@ void DBManager::addNewText(const std::string& text)
     model.removeColumn(0);
 
     QSqlRecord record = model.record();
-    record.setValue(COLUMN_ENCRYPTED_TEXT, QString::fromStdString(text));
+    record.setValue(COLUMN_ENCRYPTED_TEXT, text);
     model.insertRecord(-1, record);
     model.submitAll();
     db.commit();

@@ -1,7 +1,7 @@
 #ifndef TASK_H
 #define TASK_H
 
-#include <string>
+#include <QString>
 
 /**
  * @brief The Task class
@@ -11,24 +11,24 @@ class Task
 {
 public:
     Task(int id);
-    Task(int textId, std::string fromKey, std::string toKey);
-    Task(int id, int textId, std::string fromKey, std::string toKey);
-    Task(int id, int textId, std::string fromKey, std::string toKey, unsigned long long acceptedTimestamp);
-    Task(int id, int textId, std::string fromKey, std::string toKey, unsigned long long acceptedTimestamp, std::string bestKey, double confidence);
+    Task(int textId, QString fromKey, QString toKey);
+    Task(int id, int textId, QString fromKey, QString toKey);
+    Task(int id, int textId, QString fromKey, QString toKey, unsigned long long acceptedTimestamp);
+    Task(int id, int textId, QString fromKey, QString toKey, unsigned long long acceptedTimestamp, QString bestKey, double confidence);
 
     int getId() const;
 
     int getTextId() const;
 
-    std::string getFromKey() const;
+    QString getFromKey() const;
 
-    std::string getToKey() const;
+    QString getToKey() const;
 
     unsigned long long getAcceptedTimestamp() const;
     void setAcceptedTimestamp(unsigned long long value);
 
-    std::string getBestKey() const;
-    void setBestKey(const std::string& value);
+    QString getBestKey() const;
+    void setBestKey(const QString& value);
 
     double getConfidence() const;
     void setConfidence(double value);
@@ -36,10 +36,10 @@ public:
 private:
     const int id;
     int textId;
-    std::string fromKey;
-    std::string toKey;
+    QString fromKey;
+    QString toKey;
     unsigned long long acceptedTimestamp;
-    std::string bestKey;
+    QString bestKey;
     double confidence;
 };
 

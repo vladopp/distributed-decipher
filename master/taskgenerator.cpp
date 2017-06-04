@@ -6,13 +6,13 @@
  * @param keyLength
  * @return Returns a vector with all tasks for the provided @keyLength.
  */
-std::vector< std::pair<std::string, std::string> > TaskGenerator::getTasks( size_t keyLength )
+std::vector< std::pair<QString, QString> > TaskGenerator::getTasks( size_t keyLength )
 {
-    std::vector< std::pair<std::string, std::string> > result;
+    std::vector< std::pair<QString, QString> > result;
 
-    std::string lowerBound(keyLength, 'a');
-    std::string upperBound = getUpperBound(lowerBound);
-    std::string end(keyLength, 'z');
+    QString lowerBound(keyLength, 'a');
+    QString upperBound = getUpperBound(lowerBound);
+    QString end(keyLength, 'z');
     while( lowerBound != upperBound )
     {
         result.push_back(std::make_pair(lowerBound, upperBound));
@@ -29,7 +29,7 @@ std::vector< std::pair<std::string, std::string> > TaskGenerator::getTasks( size
  * @param lowerBound
  * @return
  */
-std::string TaskGenerator::getUpperBound(std::string lowerBound)
+QString TaskGenerator::getUpperBound(QString lowerBound)
 {
     static const int TASK_SIZE = 3;
     if(lowerBound.size() <= TASK_SIZE )
@@ -38,11 +38,11 @@ std::string TaskGenerator::getUpperBound(std::string lowerBound)
         return KeyGenerator::getLastPermutation(lowerBound);
     }
 
-    std::string upperBound = lowerBound;
+    QString upperBound = lowerBound;
     // set TASK_SIZE 'z' at the end
     for(size_t i=upperBound.size() - TASK_SIZE; i < upperBound.size(); i++)
     {
-        upperBound[i] = 'z';
+        upperBound.replace(i, 1, 'z');
     }
 
     return upperBound;

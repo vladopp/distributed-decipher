@@ -2,7 +2,7 @@
 #define KEYGENERATOR_H
 
 #include <vector>
-#include <string>
+#include <QString>
 
 /**
  * @brief The KeyGenerator class This class is responsible for creating alphabetical permutations
@@ -12,8 +12,8 @@
 class KeyGenerator
 {
 public:
-    static std::string nextPermutation(std::string currentPermutation);
-    static std::string getLastPermutation(std::string currentPermutation);
+    static QString nextPermutation(QString currentPermutation);
+    static QString getLastPermutation(QString currentPermutation);
 };
 
 #endif // KEYGENERATOR_H

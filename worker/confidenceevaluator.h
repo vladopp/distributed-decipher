@@ -1,18 +1,17 @@
 #ifndef CONFIDENCEEVALUATOR_H
 #define CONFIDENCEEVALUATOR_H
 
-#include <string>
-#include <unordered_set>
 #include <QString>
+#include <QSet>
 
 class ConfidenceEvaluator
 {
 public:
-    ConfidenceEvaluator(QString dictionaryPath);
-    double calculateConfidence(const std::string& text);
+    ConfidenceEvaluator(const QString& dictionaryPath);
+    double calculateConfidence(const QString& text);
 private:
-    std::unordered_set<std::string> englishDictionary;
-    void loadDictionary(QString dictionaryPath);
+    QSet<QString> englishDictionary;
+    void loadDictionary(const QString& dictionaryPath);
 };
 
 #endif // CONFIDENCEEVALUATOR_H

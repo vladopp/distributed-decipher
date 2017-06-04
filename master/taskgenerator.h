@@ -2,14 +2,14 @@
 #define TASKGENERATOR_H
 
 #include <vector>
-#include <string>
+#include <QString>
 
 class TaskGenerator
 {
 public:
-    static std::vector< std::pair<std::string, std::string> > getTasks( size_t keyLength );
+    static std::vector< std::pair<QString, QString> > getTasks( size_t keyLength );
 private:
-    static std::string getUpperBound(std::string lowerBound);
+    static QString getUpperBound(QString lowerBound);
 };
 
 #endif // TASKGENERATOR_H
