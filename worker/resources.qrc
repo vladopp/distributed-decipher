@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/english-words.txt</file>
+    </qresource>
+</RCC>

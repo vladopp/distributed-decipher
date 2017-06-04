@@ -3,15 +3,16 @@
 
 #include <string>
 #include <unordered_set>
+#include <QString>
 
 class ConfidenceEvaluator
 {
 public:
-    ConfidenceEvaluator(const std::string& dictionaryPath);
+    ConfidenceEvaluator(QString dictionaryPath);
     double calculateConfidence(const std::string& text);
 private:
     std::unordered_set<std::string> englishDictionary;
-    void loadDictionary(const std::string& dictionaryPath);
+    void loadDictionary(QString dictionaryPath);
 };
 
 #endif // CONFIDENCEEVALUATOR_H

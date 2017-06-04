@@ -1,12 +1,14 @@
 #include "confidenceevaluator.h"
 #include <fstream>
 #include <sstream>
+#include <QFile>
+#include <QTextStream>
 
 /**
  * @brief ConfidenceEvaluator::ConfidenceEvaluator
  * @param dictionaryPath
  */
-ConfidenceEvaluator::ConfidenceEvaluator(const std::string& dictionaryPath)
+ConfidenceEvaluator::ConfidenceEvaluator(QString dictionaryPath)
 {
     std::unordered_set<std::string> englishDictionary;
     loadDictionary(dictionaryPath);
@@ -38,14 +40,18 @@ double ConfidenceEvaluator::calculateConfidence(const std::string& text)
  * @brief ConfidenceEvaluator::loadDictionary
  * @param dictionaryPath
  */
-void ConfidenceEvaluator::loadDictionary(const std::string& dictionaryPath)
+void ConfidenceEvaluator::loadDictionary(QString dictionaryPath)
 {
-    std::ifstream file;
-    file.open(dictionaryPath);
-    std::string word;
-    while (file >> word)
+    QFile file(dictionaryPath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        printf("Unable to open file %s", qPrintable(file.errorString()));
+        return;
+    }
+
+    QTextStream in(&file);
+    while (!in.atEnd())
     {
-        englishDictionary.insert(word);
+        englishDictionary.insert(in.readLine().toStdString());
     }
     file.close();
 }
