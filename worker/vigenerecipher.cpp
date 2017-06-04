@@ -10,13 +10,12 @@ QString VigenereCipher::encrypt(const QString& text, const QString& key)
 {
 QString result=text;
 
-    size_t idxText=0U;
-    size_t idxKey=0U;
+    int idxText=0U;
+    int idxKey=0U;
     for(;idxText<result.size(); idxText++)
     {
-        //result[idxText] = result[idxText] + key[idxKey];
-
-        //idxKey = (idxKey + 1) % key.size();
+        result.replace(idxText, 1, QChar(result.at(idxText).unicode() + key.at(idxKey).unicode()));
+        idxKey = (idxKey + 1) % key.size();
     }
 
     return result;
@@ -32,13 +31,12 @@ QString VigenereCipher::decrypt(const QString& text, const QString& key)
 {
 QString result=text;
 
-    size_t idxText=0U;
-    size_t idxKey=0U;
+    int idxText=0U;
+    int idxKey=0U;
     for(;idxText<result.size(); idxText++)
     {
-        //result[idxText] = result[idxText] - key[idxKey];
-
-        //idxKey = (idxKey + 1) % key.size();
+        result.replace(idxText, 1, QChar(result.at(idxText).unicode() - key.at(idxKey).unicode()));
+        idxKey = (idxKey + 1) % key.size();
     }
 
     return result;
