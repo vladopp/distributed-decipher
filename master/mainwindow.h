@@ -21,7 +21,7 @@ private slots:
 
 private:
     Ui::mainwindow *ui;
-    DBManager db;
+    DBManager *db;
 
     void generateTasks(std::string encryptedText);
     int getMostProbableKeyLength(std::string encryptedText);

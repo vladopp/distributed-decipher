@@ -24,28 +24,16 @@ mainwindow::mainwindow(QWidget *parent) :
         msgBox.exec();
     }
 
-    DBManager *dbManager = new DBManager();
-    printf("Connecting to database...\n");
-    bool ok = dbManager->initDbConnection(
-                configuration.getDriver(),
+    db = new DBManager(
                 configuration.getHostName(),
                 configuration.getDatabaseName(),
                 configuration.getUsername(),
                 configuration.getPassword());
-
-    if (!ok)
-    {
-        QMessageBox msgBox;
-        msgBox.setInformativeText("Error connecting to the database.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.exec();
-        close();
-    }
 }
 
 mainwindow::~mainwindow()
 {
+    delete db;
     delete ui;
 }
 
@@ -87,7 +75,7 @@ void mainwindow::generateTasks(std::string encryptedText)
 {
     int mostProbableKeyLength = getMostProbableKeyLength(encryptedText);
     int startTaskID = 0;
-    int textID = db.getTextID();
+    int textID = db->getTextId(encryptedText);
 
     if(mostProbableKeyLength == -1) // didn't find such key
     {
