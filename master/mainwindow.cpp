@@ -3,6 +3,7 @@
 #include "taskgenerator.h"
 #include <QMessageBox>
 #include <QString>
+#include <QThread>
 #include <string>
 #include <utility>
 #include "configmanager.h"
@@ -24,8 +25,7 @@ mainwindow::mainwindow(QWidget *parent) :
         msgBox.exec();
     }
 
-    db = new DBManager(
-                configuration.getHostName(),
+    db = new DBManager(configuration.getHostName(),
                 configuration.getDatabaseName(),
                 configuration.getUsername(),
                 configuration.getPassword());
@@ -39,8 +39,6 @@ mainwindow::~mainwindow()
 
 void mainwindow::on_buttonDecrypt_clicked()
 {
-    // TODO: This check should be removed and add binding to the button and the text content of the Edit object
-    // P.S: If it is too much work, just leave it as it is. :)
     if(ui->editEncryptedText->toPlainText().trimmed() == "")
     {
         // not entered encrypted text, show error message
@@ -51,16 +49,14 @@ void mainwindow::on_buttonDecrypt_clicked()
         msgBox.exec();
         return;
     }
-    QString encryptedText = ui->editEncryptedText->toPlainText()
-            .trimmed();
+    QString encryptedText = ui->editEncryptedText->toPlainText().trimmed();
 
-    // TODO: This method should be called in seperate thread.
-    // Reason: We must update the status of the decrypted text dynamically.
     generateTasks(encryptedText);
 
-    // TODO: This method should be called in seperate thread.
-    // Reason: We must update the status of the decrypted text dynamically.
-    watchDecryptedTextStatus();
+    // Update the status of the decrypted text dynamically.
+    timer.setInterval(1000);
+    timer.connect(&timer, SIGNAL(timeout()), this, SLOT(update_decryption_status()));
+    timer.start();
 
     // TODO: Add status bar with "Generating" and then change to "Waiting for workers"
     QMessageBox msgBox;
@@ -74,12 +70,13 @@ void mainwindow::generateTasks(QString encryptedText)
 {
     int mostProbableKeyLength = getMostProbableKeyLength(encryptedText);
     int startTaskID = 0;
-    int textID = db->getTextId(encryptedText);
+    //int textID = db->getTextId(encryptedText);
+    int textID = 1;
 
     if(mostProbableKeyLength == -1) // didn't find such key
     {
         // brute force all possibilites until the max brute force key length
-        const int MAX_BF_KEY_LENGTH = 10;
+        const int MAX_BF_KEY_LENGTH = 5;
         for(int keyLength = 1; keyLength < MAX_BF_KEY_LENGTH; keyLength++)
         {
             startTaskID = submitAllKeysWithLength(keyLength, startTaskID, textID) + 1;
@@ -87,7 +84,7 @@ void mainwindow::generateTasks(QString encryptedText)
     }
     else
     {
-        (void) submitAllKeysWithLength(mostProbableKeyLength, startTaskID, textID);
+        submitAllKeysWithLength(mostProbableKeyLength, startTaskID, textID);
     }
 }
 
@@ -95,11 +92,6 @@ int mainwindow::getMostProbableKeyLength(QString encryptedText)
 {
     // TODO: Method should be implemented after a meeting with Landjev. Haha...
     return -1;
-}
-
-void mainwindow::watchDecryptedTextStatus()
-{
-    // TODO: Implement queries to the DB to refresh the status of the decrypted text.
 }
 
 /**
@@ -111,7 +103,6 @@ void mainwindow::watchDecryptedTextStatus()
  */
 int mainwindow::submitAllKeysWithLength(int keyLength, int startTaskID, int textID)
 {
-    // TODO: Perhaps do a producer-consumer pattern instead of returning the whole vector?
     std::vector< std::pair<QString, QString> > tasks = TaskGenerator::getTasks(keyLength);
 
     int nextTaskID = startTaskID;
@@ -119,10 +110,20 @@ int mainwindow::submitAllKeysWithLength(int keyLength, int startTaskID, int text
     {
         Task currentTask(nextTaskID, textID, taskBounds.first, taskBounds.second);
 
-        // TODO: Submit currentTask to DB.
+        db->addNewTask(currentTask);
 
         nextTaskID++;
     }
 
     return nextTaskID;
+}
+
+void mainwindow::update_decryption_status()
+{
+    static int a=0;
+    ui->editDecryptedText->setText(QString(a++));
+
+    //TODO: dbManager::getBestKey()
+    //TODO: vigenereCipher::decryptTextWithBestKey()
+    //TODO: ui->editDecryptedText->setText(QString( decryptedText ));
 }

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QDialog>
+#include <QTimer>
 #include "dbmanager.h"
 
 namespace Ui {
@@ -18,14 +19,15 @@ public:
 
 private slots:
     void on_buttonDecrypt_clicked();
+    void update_decryption_status();
 
 private:
     Ui::mainwindow *ui;
     DBManager *db;
+    QTimer timer;
 
     void generateTasks(QString encryptedText);
     int getMostProbableKeyLength(QString encryptedText);
-    void watchDecryptedTextStatus();
     int submitAllKeysWithLength(int keyLength, int startTaskID, int textID);
 };
 
