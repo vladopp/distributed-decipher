@@ -1,6 +1,7 @@
 TEMPLATE = app
 
 QT += core gui widgets
+QT += core gui
 QT += core sql
 CONFIG += c++11
 
