@@ -1,4 +1,5 @@
 #include <QSqlDatabase>
+#include <QPair>
 #include <task.h>
 
 #ifndef DBMANAGER_H
@@ -12,10 +13,10 @@ public:
     bool connect();
     Task getUnprocessedTask();
     QString getTextById(int id);
-    int getTextId(const QString& text);
     void addTaskResult(const Task& task);
     void addNewTask(const Task& task);
-    void addNewText(const QString& text);
+    int addNewText(const QString& text);
+    QPair<QString, double> getBestKey(int text_id);
     void closeConnection();
 private:
     QSqlDatabase db;

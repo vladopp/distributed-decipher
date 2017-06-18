@@ -11,9 +11,11 @@ SOURCES += main.cpp \
     ..\common\dbmanager.cpp \
     ..\common\task.cpp \
     mainwindow.cpp \
-    ..\common\configmanager.cpp
+    ..\common\configmanager.cpp \
+    ..\common\vigenerecipher.cpp
 
-RESOURCES +=
+RESOURCES += \
+    resources.qrc
 
 INCLUDEPATH += "..\common"
 
@@ -25,4 +27,5 @@ HEADERS += taskgenerator.h \
     ..\common\dbmanager.h \
     ..\common\task.h \
     mainwindow.h \
-    ..\common\configmanager.h
+    ..\common\configmanager.h \
+    ..\common\vigenerecipher.h

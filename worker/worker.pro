@@ -11,7 +11,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     confidenceevaluator.cpp \
-    vigenerecipher.cpp \
+    ..\common\vigenerecipher.cpp \
     ..\common\keygenerator.cpp \
     ..\common\task.cpp \
     ..\common\dbmanager.cpp \
@@ -23,7 +23,7 @@ LIBS += "C:\Program Files\PostgreSQL\9.6\lib\libpq.lib"
 
 
 HEADERS += confidenceevaluator.h \
-    vigenerecipher.h \
+    ..\common\vigenerecipher.h \
     ..\common\keygenerator.h \
     ..\common\task.h \
     ..\common\dbmanager.h \

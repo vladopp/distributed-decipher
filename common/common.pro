@@ -18,9 +18,11 @@ LIBS += "C:\Program Files\PostgreSQL\9.6\lib\libpq.lib"
 SOURCES += dbmanager.cpp \
     keygenerator.cpp \
     task.cpp \
-    configmanager.cpp
+    configmanager.cpp \
+    vigenerecipher.cpp
 
 HEADERS += dbmanager.h \
     keygenerator.h \
     task.h \
-    configmanager.h
+    configmanager.h \
+    vigenerecipher.h

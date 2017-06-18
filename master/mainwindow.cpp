@@ -4,10 +4,12 @@
 #include <QMessageBox>
 #include <QString>
 #include <QThread>
+#include <QPair>
 #include <string>
 #include <utility>
 #include "configmanager.h"
 #include "dbmanager.h"
+#include "vigenerecipher.h"
 
 mainwindow::mainwindow(QWidget *parent) :
     QDialog(parent),
@@ -16,7 +18,7 @@ mainwindow::mainwindow(QWidget *parent) :
     ui->setupUi(this);
 
     ConfigManager configuration;
-    if(configuration.loadFromFile("config.ini"))
+    if(!configuration.loadFromFile(":/config.ini"))
     {
         QMessageBox msgBox;
         msgBox.setInformativeText("Error reading configuration from file.");
@@ -29,6 +31,12 @@ mainwindow::mainwindow(QWidget *parent) :
                 configuration.getDatabaseName(),
                 configuration.getUsername(),
                 configuration.getPassword());
+
+    if (!db->connect())
+    {
+        fprintf(stderr, "Error connecting to the database.");
+        exit(1);
+    }
 }
 
 mainwindow::~mainwindow()
@@ -51,11 +59,18 @@ void mainwindow::on_buttonDecrypt_clicked()
     }
     QString encryptedText = ui->editEncryptedText->toPlainText().trimmed();
 
+    int textId = db->addNewText(encryptedText);
+    if (textId == -1)
+    {
+        fprintf(stderr, "Error inserting new text into the database.");
+        exit(1);
+    }
     generateTasks(encryptedText);
 
     // Update the status of the decrypted text dynamically.
     timer.setInterval(1000);
-    timer.connect(&timer, SIGNAL(timeout()), this, SLOT(update_decryption_status()));
+    // DO NOT TOUCH!!! EXTREMELY FRAFILE!!! :D THAT LAMBDA, THOUGH...
+    connect(&timer, &QTimer::timeout, [=]() { update_decryption_status(encryptedText, textId); });
     timer.start();
 
     // TODO: Add status bar with "Generating" and then change to "Waiting for workers"
@@ -118,12 +133,16 @@ int mainwindow::submitAllKeysWithLength(int keyLength, int startTaskID, int text
     return nextTaskID;
 }
 
-void mainwindow::update_decryption_status()
+void mainwindow::update_decryption_status(QString text, int textId)
 {
     static int a=0;
     ui->editDecryptedText->setText(QString(a++));
 
-    //TODO: dbManager::getBestKey()
-    //TODO: vigenereCipher::decryptTextWithBestKey()
-    //TODO: ui->editDecryptedText->setText(QString( decryptedText ));
+    QPair<QString, double> keyToConfidencePair = db->getBestKey(textId);
+    if (keyToConfidencePair.second > 0.1)
+    {
+        QString decryptedText = VigenereCipher::decrypt(text, keyToConfidencePair.first);
+        ui->editDecryptedText->setText(decryptedText);
+        timer.stop();
+    }
 }

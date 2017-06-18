@@ -5,7 +5,10 @@
 
 /**
  * @brief The Task class
- * TODO: Add description.
+ *
+ * This class represents a task to be processed by a worker instance.
+ * It accepts the range of keys it needs to test and
+ * calculates the confidence score for each one.
  */
 class Task
 {

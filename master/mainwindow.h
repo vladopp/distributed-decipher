@@ -17,9 +17,9 @@ public:
     explicit mainwindow(QWidget *parent = 0);
     ~mainwindow();
 
-private slots:
+public slots:
     void on_buttonDecrypt_clicked();
-    void update_decryption_status();
+    void update_decryption_status(QString text, int text_id);
 
 private:
     Ui::mainwindow *ui;
