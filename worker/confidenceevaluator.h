@@ -8,9 +8,9 @@ class ConfidenceEvaluator
 {
 public:
     ConfidenceEvaluator(const QString& dictionaryPath);
-    double calculateConfidence(const QString& text);
+    double calculateConfidence(const QString& text) const;
 private:
-    QSet<QString> englishDictionary;
+    QSet<QString> dictionary;
     void loadDictionary(const QString& dictionaryPath);
 };
 

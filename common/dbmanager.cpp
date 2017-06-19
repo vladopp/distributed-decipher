@@ -16,7 +16,6 @@ const static QString COLUMN_BEST_KEY = "best_key";
 const static QString COLUMN_CONFIDENCE = "confidence";
 const static QString COLUMN_ENCRYPTED_TEXT = "encrypted_text";
 
-
 /**
  * @brief DBManager::DBManager ctor.
  */
