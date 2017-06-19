@@ -76,10 +76,10 @@ void processTask(const ConfidenceEvaluator& evaluator, Task& task, DBManager& db
     printf("Processed task with id %d. Got score %f with key %s.\n", task.getId(), task.getConfidence(), qPrintable(task.getBestKey()));
 }
 
-int main(int argc, char *argv[])
-{
-    QCoreApplication a(argc, argv);
-
+/**
+ * @brief printWelcomeMessage Prints welcome message on the standard output.
+ */
+void printWelcomeMessage() {
     printf("WELCOME TO DECIPHY 2000\n"
 "                -. .                                        \n"
 "           _____   ',' ,                                    \n"
@@ -92,7 +92,12 @@ int main(int argc, char *argv[])
 "      /   .______.- ~ \\                                     \n"
 "    /   /'          \\   \\                                   \n"
 "    \\./               \\/'  \n\n");
+}
 
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+    printWelcomeMessage();
     ConfigManager configuration = loadConfiguration();
     DBManager dbManager = connectDb(configuration.getHostName(),
                                     configuration.getDatabaseName(),
