@@ -79,6 +79,20 @@ void processTask(const ConfidenceEvaluator& evaluator, Task& task, DBManager& db
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+
+    printf("WELCOME TO DECIPHY 2000\n"
+"                -. .                                        \n"
+"           _____   ',' ,                                    \n"
+"         ,'     ,'   ', ',                                  \n"
+"       ,'     ,'      |  |                                  \n"
+"      \\       \\       |  |                                  \n"
+"        \\ /^\\   \\    ,' ,'                                  \n"
+"              \\   \\ ,' ,'                                   \n"
+"        / ~-.___\\.-'  ,'                                    \n"
+"      /   .______.- ~ \\                                     \n"
+"    /   /'          \\   \\                                   \n"
+"    \\./               \\/'  \n\n");
+
     ConfigManager configuration = loadConfiguration();
     DBManager dbManager = connectDb(configuration.getHostName(),
                                     configuration.getDatabaseName(),
