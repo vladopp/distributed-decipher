@@ -59,19 +59,20 @@ void mainwindow::on_buttonDecrypt_clicked()
     }
     QString encryptedText = ui->editEncryptedText->toPlainText().trimmed();
 
-    int textId = db->addNewText(encryptedText);
-    if (textId == -1)
+    int textID = db->addNewText(encryptedText);
+    if (textID == -1)
     {
         fprintf(stderr, "Error inserting new text into the database.");
         exit(1);
     }
-    generateTasks(encryptedText);
+    generateTasks(encryptedText, textID);
 
+    timer = new QTimer();
     // Update the status of the decrypted text dynamically.
-    timer.setInterval(1000);
-    // DO NOT TOUCH!!! EXTREMELY FRAFILE!!! :D THAT LAMBDA, THOUGH...
-    connect(&timer, &QTimer::timeout, [=]() { update_decryption_status(encryptedText, textId); });
-    timer.start();
+    timer->setInterval(1000);
+    // DO NOT TOUCH!!! EXTREMELY FRAGILE!!! :D THAT LAMBDA, THOUGH...
+    connect(timer, &QTimer::timeout, [=]() { update_decryption_status(encryptedText, textID); });
+    timer->start();
 
     // TODO: Add status bar with "Generating" and then change to "Waiting for workers"
     QMessageBox msgBox;
@@ -81,12 +82,10 @@ void mainwindow::on_buttonDecrypt_clicked()
     msgBox.exec();
 }
 
-void mainwindow::generateTasks(QString encryptedText)
+void mainwindow::generateTasks(QString encryptedText, int textID)
 {
     int mostProbableKeyLength = getMostProbableKeyLength(encryptedText);
     int startTaskID = 0;
-    //int textID = db->getTextId(encryptedText);
-    int textID = 1;
 
     if(mostProbableKeyLength == -1) // didn't find such key
     {
@@ -139,10 +138,10 @@ void mainwindow::update_decryption_status(QString text, int textId)
     ui->editDecryptedText->setText(QString(a++));
 
     QPair<QString, double> keyToConfidencePair = db->getBestKey(textId);
-    if (keyToConfidencePair.second > 0.1)
+    if (keyToConfidencePair.second == 1.0)
     {
         QString decryptedText = VigenereCipher::decrypt(text, keyToConfidencePair.first);
         ui->editDecryptedText->setText(decryptedText);
-        timer.stop();
+        timer->stop();
     }
 }

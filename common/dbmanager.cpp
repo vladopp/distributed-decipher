@@ -81,14 +81,17 @@ Task DBManager::getUnprocessedTask()
  */
 QString DBManager::getTextById(int id)
 {
-    QSqlTableModel model;
-    model.setTable(TABLE_TEXTS);
-    model.setFilter(COLUMN_ID + " = " + id);
+    QSqlQuery query;
+    query.prepare("SELECT encrypted_text FROM texts WHERE id=:id");
+    query.bindValue(":id", id);
+    query.exec();
 
-    model.select();
-    QSqlRecord record = model.record(0);
+    if (query.first())
+    {
+        return query.value(0).toString();
+    }
 
-    return record.value(COLUMN_ENCRYPTED_TEXT).toString();
+    exit(1);
 }
 
 /**
@@ -156,7 +159,7 @@ int DBManager::addNewText(const QString& text)
 QPair<QString, double> DBManager::getBestKey(int text_id)
 {
     QSqlQuery query;
-    query.prepare("SELECT best_key, max(confidence) as confidence FROM tasks WHERE text_id=:id GROUP BY best_key");
+    query.prepare("SELECT best_key, confidence FROM tasks WHERE text_id=:id ORDER BY confidence DESC LIMIT 1");
     query.bindValue(":id", text_id);
     query.exec();
 

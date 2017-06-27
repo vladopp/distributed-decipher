@@ -126,5 +126,7 @@ int main(int argc, char *argv[])
 
     printf("Did not find any unprocessed tasks for the last %d seconds. Closing the application.\n", allowed_tries * timeout_seconds);
     dbManager.closeConnection();
+    exit(0);
+
     return a.exec();
 }

@@ -24,9 +24,9 @@ public slots:
 private:
     Ui::mainwindow *ui;
     DBManager *db;
-    QTimer timer;
+    QTimer *timer;
 
-    void generateTasks(QString encryptedText);
+    void generateTasks(QString encryptedText, int textID);
     int getMostProbableKeyLength(QString encryptedText);
     int submitAllKeysWithLength(int keyLength, int startTaskID, int textID);
 };
