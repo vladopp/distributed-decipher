@@ -59,7 +59,7 @@ QString VigenereCipher::decrypt(const QString& text, const QString& key)
                 || result.at(idxText) == '!'
                 || result.at(idxText) == '?'
                 || result.at(idxText) == ':'
-                || result.at(idxText) == '-'
+                || result.at(idxText) == '-')
         {
             continue;
         }
