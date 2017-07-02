@@ -15,6 +15,7 @@ const static QString COLUMN_ACCEPTED_TIMESTAMP = "accepted_timestamp";
 const static QString COLUMN_BEST_KEY = "best_key";
 const static QString COLUMN_CONFIDENCE = "confidence";
 const static QString COLUMN_ENCRYPTED_TEXT = "encrypted_text";
+const static int FIVE_MINUTES_IN_SECONDS = 5* 60;
 
 /**
  * @brief DBManager::DBManager ctor.
@@ -40,18 +41,18 @@ bool DBManager::connect()
 }
 
 /**
- * @brief DBManager::getUnprocessedTask Gets the next task to be processed.
+ * @brief DBManager::getUnprocessedTask Gets the next task to be processed. It returns a task that
+ * is not finished and accepted by a worker in the last 5 minutes.
  * @return Returns Task object with information about the task, or NULL if there is no such task.
  */
 Task DBManager::getUnprocessedTask()
 {
-    // execute in a transaction to ensure that no other worker
-    // can take the same task in the meantime
     db.transaction();
 
     QSqlQuery query;
-    //TODO and accepted_timestamp < now() - 5minutes
-    query.exec("SELECT * FROM tasks WHERE best_key is null LIMIT 1");
+    query.prepare("SELECT * FROM tasks WHERE best_key IS NULL AND accepted_timestamp < :time  LIMIT 1");
+    query.bindValue(":time", std::time(0) - FIVE_MINUTES_IN_SECONDS);
+    query.exec();
 
     if (query.first())
     {

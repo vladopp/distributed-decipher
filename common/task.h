@@ -7,8 +7,12 @@
  * @brief The Task class
  *
  * This class represents a task to be processed by a worker instance.
- * It accepts the range of keys it needs to test and
- * calculates the confidence score for each one.
+ * It contains information about the id of the task, the id of the text that is processed,
+ * the starting and ending key of the sequence, the accepted timestamp of the task if it is
+ * accepted by a worker, the key that produced the best confidence score if the task is processed
+ * and the confidence score of the best key if the task is processed.
+ * Objects created for inserting into the db should use the constructor without id, because the
+ * id will be generated from the database.
  */
 class Task
 {

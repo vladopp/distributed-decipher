@@ -4,7 +4,7 @@
 #include <QTextStream>
 
 /**
- * @brief ConfidenceEvaluator::ConfidenceEvaluator Constructor that loads a dictinary file used later for calculating confidence scores.
+ * @brief ConfidenceEvaluator::ConfidenceEvaluator Constructor that loads a dictinary file that will be used for calculating confidence scores.
  * @param dictionaryPath The path to the file containig the dictionary to be used.
  */
 ConfidenceEvaluator::ConfidenceEvaluator(const QString& dictionaryPath)
@@ -15,7 +15,7 @@ ConfidenceEvaluator::ConfidenceEvaluator(const QString& dictionaryPath)
 
 /**
  * @brief ConfidenceEvaluator::calculateConfidence Calculates a confidance score which represents the probability of
- * the provided text to be the original (unencrypted text). It currently counts the number of words found in the loaded dictionary.
+ * the provided text to be the original (unencrypted text). It counts the number of words found in the loaded dictionary.
  * @param text The text that has to be evaluated
  * @return The confidence score as a floating point number
  */
@@ -37,7 +37,7 @@ double ConfidenceEvaluator::calculateConfidence(const QString& text) const
 
 /**
  * @brief ConfidenceEvaluator::loadDictionary Loads a list of words from a file used for calculating confidence scores.
- * @param dictionaryPath The path to a new line separated text file containing the dictionary
+ * @param dictionaryPath The path to a line separated text file containing the dictionary
  */
 void ConfidenceEvaluator::loadDictionary(const QString& dictionaryPath)
 {

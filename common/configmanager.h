@@ -8,7 +8,7 @@ class ConfigManager
 public:
     ConfigManager();
 
-    bool loadFromFile(QString filename);
+    bool loadFromFile(QString filePath);
     QString getHostName() const;
     QString getDatabaseName() const;
     QString getUsername() const;

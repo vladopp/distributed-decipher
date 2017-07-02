@@ -1,15 +1,17 @@
 #include "task.h"
 
 /**
- * @brief Task::Task ctor.
+ * @brief Task::Task Constructor.
  * @param id ID of the task.
  */
-Task::Task(int id) : id(id)
+Task::Task(int id) :
+    id(id)
 {
 }
 
 /**
- * @brief Task::Task ctor.
+ * @brief Task::Task Constructor that sets the textId, fromKey and toKey.
+ * The id will of the task will be generated from the database.
  * @param textId ID of the text to be processed.
  * @param fromKey Starting key from which to start the processing.
  * @param toKey Ending key to which to end the processing.
@@ -23,7 +25,7 @@ Task::Task(int textId, QString fromKey, QString toKey) :
 }
 
 /**
- * @brief Task::Task ctor.
+ * @brief Task::Task Constructor.
  * @param id ID of the task
  * @param textId ID of the text to be processed.
  * @param fromKey Starting key from which to start the processing.
@@ -38,12 +40,12 @@ Task::Task(int id, int textId, QString fromKey, QString toKey) :
 }
 
 /**
- * @brief Task::Task ctor.
+ * @brief Task::Task Constructor.
  * @param id ID of the task
  * @param textId ID of the text to be processed.
  * @param fromKey Starting key from which to start the processing.
  * @param toKey Ending key to which to end the processing.
- * @param acceptedTimestamp TODO: add description.
+ * @param acceptedTimestamp The unixtimestamp when the worker accepted the task.
  */
 Task::Task(int id, int textId, QString fromKey, QString toKey, unsigned long long acceptedTimestamp) :
     Task(id, textId, fromKey, toKey)
@@ -52,14 +54,14 @@ Task::Task(int id, int textId, QString fromKey, QString toKey, unsigned long lon
 }
 
 /**
- * @brief Task::Task
- * @param id
- * @param textId
- * @param fromKey
- * @param toKey
- * @param acceptedTimestamp
- * @param bestKey
- * @param confidence
+ * @brief Task::Task Constructor
+ * @param id ID of the task
+ * @param textId ID of the text to be processed.
+ * @param fromKey Starting key from which to start the processing.
+ * @param toKey Ending key to which to end the processing.
+ * @param acceptedTimestamp The unixtimestamp when the worker accepted the task.
+ * @param bestKey The key that generated the best confidence score.
+ * @param confidence The best confidence score produced by the best key.
  */
 Task::Task(int id, int textId, QString fromKey, QString toKey, unsigned long long acceptedTimestamp, QString bestKey, double confidence) :
     Task(id, textId, fromKey, toKey, acceptedTimestamp)
@@ -106,7 +108,7 @@ QString Task::getToKey() const
 
 /**
  * @brief Task::getAcceptedTimestamp
- * @return TODO: Add description.
+ * @return The unixtimestamp when the worker accepted the task.
  */
 unsigned long long Task::getAcceptedTimestamp() const
 {
@@ -115,7 +117,7 @@ unsigned long long Task::getAcceptedTimestamp() const
 
 /**
  * @brief Task::setAcceptedTimestamp
- * @param value TODO: Add description.
+ * @param value The unixtimestamp when the worker accepted the task.
  */
 void Task::setAcceptedTimestamp(unsigned long long value)
 {
@@ -124,7 +126,7 @@ void Task::setAcceptedTimestamp(unsigned long long value)
 
 /**
  * @brief Task::getBestKey
- * @return
+ * @return the key that generated the best confidence score.
  */
 QString Task::getBestKey() const
 {
@@ -133,7 +135,7 @@ QString Task::getBestKey() const
 
 /**
  * @brief Task::setBestKey
- * @param value
+ * @param value the key that generated the best confidence score.
  */
 void Task::setBestKey(const QString &value)
 {
@@ -142,7 +144,7 @@ void Task::setBestKey(const QString &value)
 
 /**
  * @brief Task::getConfidence
- * @return
+ * @return the confidence score of the best key.
  */
 double Task::getConfidence() const
 {
@@ -151,7 +153,7 @@ double Task::getConfidence() const
 
 /**
  * @brief Task::setConfidence
- * @param value
+ * @param value the confidence score of the best key.
  */
 void Task::setConfidence(double value)
 {
