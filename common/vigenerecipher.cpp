@@ -8,15 +8,31 @@
  */
 QString VigenereCipher::encrypt(const QString& text, const QString& key)
 {
-QString result=text;
+    QString result = text.toLower();
+    QString key_copy = key.toLower();
 
-    int idxText=0U;
-    int idxKey=0U;
-    while(idxText<result.size())
+    int idxText = 0U;
+    int idxKey = 0U;
+    for(;idxText<result.size(); idxText++)
     {
-        result.replace(idxText, 1, QChar(result.at(idxText).unicode() + key.at(idxKey).unicode()));
-        idxKey = (idxKey + 1) % key.size();
-        idxText++;
+        if (result.at(idxText) == ' '
+                || result.at(idxText) == ','
+                || result.at(idxText) == '.'
+                || result.at(idxText) == '!'
+                || result.at(idxText) == '?'
+                || result.at(idxText) == ':'
+                || result.at(idxText) == '-')
+        {
+            continue;
+        }
+
+        int replacement = result.at(idxText).toLatin1() + (key_copy.at(idxKey).toLatin1() - 97);
+        if (replacement > 122)
+        {
+            replacement -= 26;
+        }
+        result.replace(idxText, 1, QChar(replacement));
+        idxKey = (idxKey + 1) % key_copy.size();
     }
 
     return result;
@@ -30,15 +46,31 @@ QString result=text;
  */
 QString VigenereCipher::decrypt(const QString& text, const QString& key)
 {
-QString result=text;
+    QString result = text.toLower();
+    QString key_copy = key.toLower();
 
-    int idxText=0U;
-    int idxKey=0U;
-    while(idxText<result.size())
+    int idxText = 0U;
+    int idxKey = 0U;
+    for(;idxText<result.size(); idxText++)
     {
-        result.replace(idxText, 1, QChar(result.at(idxText).unicode() - key.at(idxKey).unicode()));
-        idxKey = (idxKey + 1) % key.size();
-        idxText++;
+        if (result.at(idxText) == ' '
+                || result.at(idxText) == ','
+                || result.at(idxText) == '.'
+                || result.at(idxText) == '!'
+                || result.at(idxText) == '?'
+                || result.at(idxText) == ':'
+                || result.at(idxText) == '-')
+        {
+            continue;
+        }
+
+        int replacement = result.at(idxText).toLatin1() - (key_copy.at(idxKey).toLatin1() - 97);
+        if (replacement < 97)
+        {
+            replacement += 26;
+        }
+        result.replace(idxText, 1, QChar(replacement));
+        idxKey = (idxKey + 1) % key_copy.size();
     }
 
     return result;
