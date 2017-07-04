@@ -5,7 +5,10 @@
  * @param id ID of the task.
  */
 Task::Task(int id) :
-    id(id)
+    id(id),
+    textId(0),
+    fromKey(""),
+    toKey("")
 {
 }
 

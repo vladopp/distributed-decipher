@@ -42,9 +42,9 @@ public:
 
 private:
     const int id;
-    int textId;
-    QString fromKey;
-    QString toKey;
+    const int textId;
+    const QString fromKey;
+    const QString toKey;
     unsigned long long acceptedTimestamp;
     QString bestKey;
     double confidence;

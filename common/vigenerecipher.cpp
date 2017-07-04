@@ -12,10 +12,11 @@ QString result=text;
 
     int idxText=0U;
     int idxKey=0U;
-    for(;idxText<result.size(); idxText++)
+    while(idxText<result.size())
     {
         result.replace(idxText, 1, QChar(result.at(idxText).unicode() + key.at(idxKey).unicode()));
         idxKey = (idxKey + 1) % key.size();
+        idxText++;
     }
 
     return result;
@@ -33,10 +34,11 @@ QString result=text;
 
     int idxText=0U;
     int idxKey=0U;
-    for(;idxText<result.size(); idxText++)
+    while(idxText<result.size())
     {
         result.replace(idxText, 1, QChar(result.at(idxText).unicode() - key.at(idxKey).unicode()));
         idxKey = (idxKey + 1) % key.size();
+        idxText++;
     }
 
     return result;

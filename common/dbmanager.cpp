@@ -43,14 +43,14 @@ bool DBManager::connect()
 /**
  * @brief DBManager::getUnprocessedTask Gets the next task to be processed. It returns a task that
  * is not finished and accepted by a worker in the last 5 minutes.
- * @return Returns Task object with information about the task, or NULL if there is no such task.
+ * @return Returns Task object with information about the task, or Task object with 0 as id if there is no such task.
  */
 Task DBManager::getUnprocessedTask()
 {
     db.transaction();
 
     QSqlQuery query;
-    query.prepare("SELECT * FROM tasks WHERE best_key IS NULL AND accepted_timestamp < :time  LIMIT 1");
+    query.prepare("SELECT * FROM tasks WHERE best_key IS NULL AND (accepted_timestamp IS NULL OR accepted_timestamp < :time) LIMIT 1");
     query.bindValue(":time", std::time(0) - FIVE_MINUTES_IN_SECONDS);
     query.exec();
 
