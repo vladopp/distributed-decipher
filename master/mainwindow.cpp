@@ -13,7 +13,8 @@
 
 mainwindow::mainwindow(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::mainwindow)
+    ui(new Ui::mainwindow),
+    timer(0)
 {
     ui->setupUi(this);
 
@@ -45,12 +46,20 @@ mainwindow::~mainwindow()
     delete ui;
 }
 
+/**
+ * Called when the button for decryption is clicked.
+ * @brief mainwindow::on_buttonDecrypt_clicked
+ */
 void mainwindow::on_buttonDecrypt_clicked()
 {
+    ui->buttonDecrypt->setEnabled(false);
+    ui->editEncryptedText->setReadOnly(true);
+
+QMessageBox msgBox;
+
     if(ui->editEncryptedText->toPlainText().trimmed() == "")
     {
         // not entered encrypted text, show error message
-        QMessageBox msgBox;
         msgBox.setInformativeText("Please, at least enter encrypted text! We will do the rest. :)");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
@@ -63,9 +72,25 @@ void mainwindow::on_buttonDecrypt_clicked()
     if (textID == -1)
     {
         fprintf(stderr, "Error inserting new text into the database.");
-        exit(1);
+        //update_decryption_status(encryptedText, db->getIdOfText(encryptedText));
+        //exit(1);
+
+        textID = db->getIdOfText(encryptedText);
+
+        msgBox.setInformativeText("The same text is already in Database. Now it's time to wait for workers to do the work!");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
     }
-    generateTasks(encryptedText, textID);
+    else
+    {
+        generateTasks(encryptedText, textID);
+
+        msgBox.setInformativeText("Done generating tasks. Now it's time to wait for workers to do the work!");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+    }
 
     timer = new QTimer();
     // Update the status of the decrypted text dynamically.
@@ -73,15 +98,14 @@ void mainwindow::on_buttonDecrypt_clicked()
     // DO NOT TOUCH!!! EXTREMELY FRAGILE!!! :D THAT LAMBDA, THOUGH...
     connect(timer, &QTimer::timeout, [=]() { update_decryption_status(encryptedText, textID); });
     timer->start();
-
-    // TODO: Add status bar with "Generating" and then change to "Waiting for workers"
-    QMessageBox msgBox;
-    msgBox.setInformativeText("Done generating tasks. Now it's time to wait for workers to do the work!");
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.exec();
 }
 
+/**
+ * @brief mainwindow::generateTasks Generates all tasks for the given text.
+ * @param encryptedText Encrypted text for which to generate the tasks. It is needed to check
+ * the most probable key length.
+ * @param textID Text ID of the encrypted text from the database.
+ */
 void mainwindow::generateTasks(QString encryptedText, int textID)
 {
     int mostProbableKeyLength = getMostProbableKeyLength(encryptedText);
@@ -102,10 +126,14 @@ void mainwindow::generateTasks(QString encryptedText, int textID)
     }
 }
 
+/**
+ * @brief mainwindow::getMostProbableKeyLength
+ * @param encryptedText
+ * @return Returns the most probable key length.
+ */
 int mainwindow::getMostProbableKeyLength(QString encryptedText)
 {
-    // TODO: Method should be implemented after a meeting with Landjev. Haha...
-    return -1;
+    return VigenereCipher::getProbableKeyLength(encryptedText);
 }
 
 /**
@@ -132,16 +160,60 @@ int mainwindow::submitAllKeysWithLength(int keyLength, int startTaskID, int text
     return nextTaskID;
 }
 
+/**
+ * Makes queries to the database with the best key and updates the GUI to show the current
+ * best key and its confidence. It also colors the key and confidence according to the level
+ * of confidence.
+ * If there are no more tasks to wait for, this function stops the timer.
+ *
+ * @brief mainwindow::update_decryption_status
+ * @param text Encrypted text
+ * @param textId ID of the encrypted text
+ */
 void mainwindow::update_decryption_status(QString text, int textId)
 {
-    static int a=0;
-    ui->editDecryptedText->setText(QString(a++));
+    timer->stop();
 
     QPair<QString, double> keyToConfidencePair = db->getBestKey(textId);
-    if (keyToConfidencePair.second == 1.0)
+    const double confidence = keyToConfidencePair.second;
+    const double colorStepsCount = 10;
+    const double colorStep = 255/colorStepsCount;
+    if (confidence > 0.0)
     {
         QString decryptedText = VigenereCipher::decrypt(text, keyToConfidencePair.first);
+        ui->editDecryptedText->setFontPointSize(12);
         ui->editDecryptedText->setText(decryptedText);
-        timer->stop();
+
+        std::string styleSheet = "";
+        styleSheet += "font-weight: bold;";
+        // calculate color: If confidence is low, the color goes to red, otherwise it goes to green
+        styleSheet += ("color: rgb(") +
+                std::to_string(255-(confidence * 10.0 * colorStep)) + "," +
+                std::to_string((confidence * 10.0 * colorStep)) + "," +
+                std::to_string(0) + ");";
+
+        ui->textEditConfidence->setStyleSheet(styleSheet.c_str());
+        ui->textEditConfidence->setFontPointSize(12);
+        ui->textEditConfidence->setText(QString( std::to_string(confidence).c_str() ));
+
+        ui->textEditKey->setStyleSheet(styleSheet.c_str());
+        ui->textEditKey->setFontPointSize(12);
+        ui->textEditKey->setText(QString( keyToConfidencePair.first ));
+    }
+
+    if(db->hasRemainingTasksForText(textId) == false)
+    {
+        QMessageBox msgBox;
+        msgBox.setInformativeText("All tasks for this text are finished. The best text is shown.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+
+        ui->buttonDecrypt->setEnabled(true);
+        ui->editEncryptedText->setReadOnly(false);
+    }
+    else
+    {
+        timer->start();
     }
 }

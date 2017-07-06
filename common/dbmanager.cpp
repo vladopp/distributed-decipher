@@ -160,7 +160,10 @@ int DBManager::addNewText(const QString& text)
 QPair<QString, double> DBManager::getBestKey(int text_id)
 {
     QSqlQuery query;
-    query.prepare("SELECT best_key, confidence FROM tasks WHERE text_id=:id ORDER BY confidence DESC LIMIT 1");
+    query.prepare("SELECT best_key, confidence "
+                  "FROM tasks "
+                  "WHERE text_id=:id AND best_key IS NOT NULL "
+                  "ORDER BY confidence DESC LIMIT 1");
     query.bindValue(":id", text_id);
     query.exec();
 
@@ -180,4 +183,50 @@ QPair<QString, double> DBManager::getBestKey(int text_id)
 void DBManager::closeConnection()
 {
     db.close();
+}
+
+/**
+ * @brief DBManager::getIdOfText
+ * @param text Text for which to check if it exists in the database.
+ * @return Returns the ID of the text if the text exists in the database.
+ */
+int DBManager::getIdOfText(const QString& text)
+{
+    QSqlQuery query;
+    query.prepare("SELECT id "
+                  "FROM texts "
+                  "WHERE encrypted_text=:text ");
+    query.bindValue(":text", text);
+    query.exec();
+
+    int result = -1;
+    if (query.first())
+    {
+        result = query.value(0).toInt();
+    }
+
+    return result;
+}
+
+/**
+ * @brief DBManager::hasRemainingTasksForText
+ * @param text_id Text ID for which to check if it has tasks related to it.
+ * @return Returns true if there are remaining tasks for the provided text_id.
+ */
+bool DBManager::hasRemainingTasksForText(int textId)
+{
+    QSqlQuery query;
+    query.prepare("SELECT * "
+                  "FROM tasks "
+                  "WHERE text_id=:text_id AND best_key IS NULL ");
+    query.bindValue(":text_id", textId);
+    query.exec();
+
+    bool result = false;
+    if (query.first())
+    {
+        result = true;
+    }
+
+    return result;
 }

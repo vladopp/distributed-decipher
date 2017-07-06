@@ -18,6 +18,8 @@ public:
     int addNewText(const QString& text);
     QPair<QString, double> getBestKey(int text_id);
     void closeConnection();
+    int getIdOfText(const QString& text);
+    bool hasRemainingTasksForText(int textId);
 private:
     QSqlDatabase db;
     const QString host;
